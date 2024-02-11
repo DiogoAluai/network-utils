@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>daluai.lib</groupId>
+	<artifactId>network-utils</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	
+	<description>Utlis for networking stuff</description>
+	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+   </properties>
+
+   <dependencies>
+	   <dependency>
+		   <groupId>junit</groupId>
+		   <artifactId>junit</artifactId>
+		   <version>4.13.2</version>
+		   <scope>test</scope>
+	   </dependency>
+   </dependencies>
+
+
+   <build>
+		<plugins>
+		<!--  You might need maven-assembly-plugin for jar with dependencies if you want a main class with dependencies -->
+		</plugins>
+	</build>
+
+
+</project>
