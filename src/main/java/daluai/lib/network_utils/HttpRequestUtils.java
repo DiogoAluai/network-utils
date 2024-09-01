@@ -1,7 +1,9 @@
 package daluai.lib.network_utils;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -64,10 +66,23 @@ public final class HttpRequestUtils {
         return queryHttpRequest(url, endpoint, clazz, null, Collections.emptyList());
     }
 
+    public static <T extends Serializable> T queryHttpRequest(String url, String endpoint, JavaType type) {
+        return queryHttpRequest(url, endpoint, type, null, Collections.emptyList());
+    }
+
+    public static <T extends Serializable> T queryHttpRequest(String url, String endpoint, Class<T> clazz,
+                                                              SSLOption sslOption, List<Interceptor> interceptors) {
+        JavaType type = TypeFactory.defaultInstance().constructType(clazz);
+        return queryHttpRequest(url, endpoint, type, sslOption, interceptors);
+    }
+
     /**
      * Send http GET request and deserialize it to provided class.
+     * @param type type of returned object
+     * @param sslOption nullable ssl option for https communication
+     * @param interceptors interceptors to be added, such as {@link ApiKeyInterceptor API key verification}
      */
-    public static <T extends Serializable> T queryHttpRequest(String url, String endpoint, Class<T> clazz,
+    public static <T extends Serializable> T queryHttpRequest(String url, String endpoint, JavaType type,
                                                               SSLOption sslOption, List<Interceptor> interceptors) {
         var request = new Request.Builder()
                 .url(url + endpoint)
@@ -91,13 +106,13 @@ public final class HttpRequestUtils {
                 LOG.error("Response was ok, but body was null.");
                 return null;
             }
-            if (clazz.equals(byte[].class)) {
+            if (type.getRawClass().equals(byte[].class)) {
                 return (T) body.bytes();
             }
 
             return new ObjectMapper()
                     .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                    .readValue(body.string(), clazz);
+                    .readValue(body.string(), type);
         } catch (IOException e) {
             LOG.error("Ran into IOException. Possible serialization issue, or empty response body. Returning null", e);
             return null;
