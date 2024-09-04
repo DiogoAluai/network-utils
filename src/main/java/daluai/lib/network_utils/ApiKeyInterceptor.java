@@ -7,6 +7,10 @@ import okhttp3.Response;
 
 import java.io.IOException;
 
+/**
+ * Intercept http requests to add Api key header.
+ * For Api key filtering check services-parent's ApiKeyFilter
+ */
 public class ApiKeyInterceptor implements Interceptor {
 
     public static final String HEADER_AUTHORIZATION = "Authorization";

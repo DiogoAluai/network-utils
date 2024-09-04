@@ -31,14 +31,21 @@ public final class HttpRequestUtils {
     }
 
     public static RequestResult sendHttpRequest(String url, HttpMethod httpMethod, String endpoint) {
-        return sendHttpRequest(url, httpMethod, endpoint, null);
+        return sendHttpRequest(url, httpMethod, endpoint, null, null);
     }
 
+    public static RequestResult sendHttpRequest(String url, HttpMethod httpMethod, String endpoint, Interceptor interceptor) {
+        return sendHttpRequest(url, httpMethod, endpoint, null, interceptor);
+    }
+
+    public static RequestResult sendHttpRequest(String url, HttpMethod httpMethod, String endpoint, String jsonBody) {
+        return sendHttpRequest(url, httpMethod, endpoint, jsonBody, null);
+    }
 
     /**
      * Send http request, with possible json body
      */
-    public static RequestResult sendHttpRequest(String url, HttpMethod httpMethod, String endpoint, String jsonBody) {
+    public static RequestResult sendHttpRequest(String url, HttpMethod httpMethod, String endpoint, String jsonBody, Interceptor interceptor) {
         var request = new Request.Builder()
                 .url(url + endpoint);
 
@@ -51,7 +58,11 @@ public final class HttpRequestUtils {
                     "Http method not supported: " + httpMethod);
         }
 
-        var call = new OkHttpClient().newCall(request.build());
+        var client = new OkHttpClient.Builder();
+        if (interceptor != null) {
+            client.addInterceptor(interceptor);
+        }
+        var call = client.build().newCall(request.build());
         try (Response response = call.execute()) {
             return response.isSuccessful() ? RequestResult.OK : RequestResult.FAIL;
         } catch (Exception e) {
