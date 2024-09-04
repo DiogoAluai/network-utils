@@ -80,7 +80,7 @@ public final class HttpRequestUtils {
      * Send http GET request and deserialize it to provided class.
      * @param type type of returned object
      * @param sslOption nullable ssl option for https communication
-     * @param interceptors interceptors to be added, such as {@link ApiKeyInterceptor API key verification}
+     * @param interceptors interceptors to be added, such as {@link ApiKeyInterceptor API key in header}
      */
     public static <T extends Serializable> T queryHttpRequest(String url, String endpoint, JavaType type,
                                                               SSLOption sslOption, List<Interceptor> interceptors) {
