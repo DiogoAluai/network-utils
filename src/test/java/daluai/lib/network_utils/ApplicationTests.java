@@ -2,12 +2,13 @@ package daluai.lib.network_utils;
 
 import org.junit.Test;
 
-import java.net.InetAddress;
 import java.util.Objects;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
-public class DemoApplicationTests {
+public class ApplicationTests {
 
 	@Test
     public void contextLoads() {
