@@ -14,6 +14,8 @@ public class PropertyManager {
 
     public static final String FILE_CONFIG_PROPERTIES = "config.properties";
     public static final PropertyManager DEFAULT_INSTANCE = new PropertyManager(FILE_CONFIG_PROPERTIES);
+    // user may provide overriding properties
+    public static final String VM_OPTION_CONFIG_PROPERTIES = "config.properties.file";
 
     private static final Logger LOG = LoggerFactory.getLogger(PropertyManager.class);
 
@@ -29,6 +31,10 @@ public class PropertyManager {
     private PropertyManager(String propertiesFile) {
         this.properties = new Properties();
         loadResources(propertiesFile);
+        String propertiesFileVmOption = System.getProperty(VM_OPTION_CONFIG_PROPERTIES);
+        if (propertiesFileVmOption != null) {
+            loadResources(propertiesFileVmOption);
+        }
     }
 
     private void loadResources(String propertiesFile) {

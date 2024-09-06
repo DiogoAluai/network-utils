@@ -1,7 +1,7 @@
 package daluai.lib.network_utils;
 
 
-import daluai.lib.network_utils.property.PropertyKeys;
+import daluai.lib.network_utils.property.PropertyKey;
 import daluai.lib.network_utils.property.PropertyManager;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -26,8 +26,8 @@ public class ApiKeyInterceptor implements Interceptor {
     /**
      * Fetch api key from properties and use it.
      */
-    public ApiKeyInterceptor() {
-        this.apiKey = PropertyManager.DEFAULT_INSTANCE.getProperty(PropertyKeys.API_KEY);
+    public ApiKeyInterceptor(PropertyKey apiProperty) {
+        this.apiKey = PropertyManager.DEFAULT_INSTANCE.getProperty(apiProperty);
     }
 
     @Override
