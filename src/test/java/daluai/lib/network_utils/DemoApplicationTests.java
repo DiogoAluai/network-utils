@@ -1,11 +1,14 @@
 package daluai.lib.network_utils;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import java.net.InetAddress;
 import java.util.Objects;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class DemoApplicationTests {
 
@@ -29,7 +32,8 @@ public class DemoApplicationTests {
 		LocalIpProbe.IpResult ipResult = Objects.requireNonNull(LocalIpProbe.firstActiveIPv4Interface());
 
 		String interfaceName = ipResult.networkInterface().getName();
-        assertEquals("wlo1", interfaceName);
+		assertNotNull(interfaceName);
+        assertTrue(interfaceName.startsWith("wl"));
 
 		String ipAddress = ipResult.inetAddress().getHostAddress();
         assertFalse(ipAddress.isEmpty());

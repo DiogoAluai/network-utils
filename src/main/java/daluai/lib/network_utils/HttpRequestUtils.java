@@ -26,17 +26,15 @@ public final class HttpRequestUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpRequestUtils.class);
 
-    private HttpRequestUtils() {
-        // utils class, no instantiation
-    }
-
+    /**
+     * Http request returning simple result.
+     */
     public static RequestResult sendHttpRequest(String url, HttpMethod httpMethod, String endpoint) {
         return sendHttpRequest(url, httpMethod, endpoint, null);
     }
 
-
     /**
-     * Send http request, with possible json body
+     * Send http request, with possible json body, returning simple result.
      */
     public static RequestResult sendHttpRequest(String url, HttpMethod httpMethod, String endpoint, String jsonBody) {
         var request = new Request.Builder()
@@ -62,16 +60,25 @@ public final class HttpRequestUtils {
 
     public record SSLOption (SSLContext sslContext, X509TrustManager trustManager) {}
 
+    /**
+     * Http request with deserialization. May return null.
+     */
     public static <T extends Serializable> T queryHttpRequest(String url, String endpoint, Class<T> clazz) {
         return queryHttpRequest(url, endpoint, clazz, null, Collections.emptyList());
     }
 
+    /**
+     * Http request with deserialization. May return null.
+     */
     public static <T extends Serializable> T queryHttpRequest(String url, String endpoint, JavaType type) {
         return queryHttpRequest(url, endpoint, type, null, Collections.emptyList());
     }
 
+    /**
+     * Http/s request with deserialization. May return null.
+     */
     public static <T extends Serializable> T queryHttpRequest(String url, String endpoint, Class<T> clazz,
-                                                              SSLOption sslOption, List<Interceptor> interceptors) {
+            SSLOption sslOption, List<Interceptor> interceptors) {
         JavaType type = TypeFactory.defaultInstance().constructType(clazz);
         return queryHttpRequest(url, endpoint, type, sslOption, interceptors);
     }
@@ -92,9 +99,7 @@ public final class HttpRequestUtils {
         var client = new OkHttpClient.Builder();
         if (sslOption != null) {
             client.sslSocketFactory(sslOption.sslContext.getSocketFactory(), sslOption.trustManager)
-                    .hostnameVerifier((hostname, session) -> {
-                        return true; // Bypass hostname verification
-                    });
+                    .hostnameVerifier((_, _) -> true /* Bypass hostname verification */ );
         }
 
         interceptors.forEach(client::addInterceptor);
@@ -119,4 +124,7 @@ public final class HttpRequestUtils {
         }
     }
 
+    private HttpRequestUtils() {
+        // utils class, no instantiation
+    }
 }
